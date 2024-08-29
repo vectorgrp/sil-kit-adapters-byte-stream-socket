@@ -1,4 +1,4 @@
 [submodule "common"]
 	path = common
-	url = https://github1.vg.vector.int/jmasse/sil-kit-adapters-common.git
+	url = git@github1.vg.vector.int:jmasse/sil-kit-adapters-common.git
 	branch = SKA-512_common_repo_creation

@@ -1,6 +1,7 @@
 /out/
 /.vs*/
-/_build/
+/build/
+/install/
 bin
 lib
 Downloads

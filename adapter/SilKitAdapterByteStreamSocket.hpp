@@ -7,5 +7,6 @@
 namespace adapters {
 
     extern const std::string bytestreamArg;
+    extern const std::string defaultParticipantName;
 
 }

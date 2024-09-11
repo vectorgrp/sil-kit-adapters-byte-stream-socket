@@ -15,7 +15,7 @@ set( SILKIT_ADAPTER_BYTE_STREAM_SOCKET_VERSION "1.0.0" )
 
 set( COMMON_DEMOS_TO_BUILD SilKitDemoBytesPubSubEchoDevice )
 include( common/CMakeLists.txt )
-set_target_properties( SilKitDemoBytesPubSubEchoDevice PROPERTIES OUTPUT_NAME "sil-kit-demo-bytestream-echo-device" )
+set_target_properties( SilKitDemoBytesPubSubEchoDevice PROPERTIES OUTPUT_NAME "sil-kit-demo-byte-stream-echo-device" )
 
 add_subdirectory( adapter )
 
@@ -27,18 +27,20 @@ add_subdirectory( adapter )
 # Leave out git repo related data
 
 if( WIN32 )
-    # set the default install paths for Windows 32 and 64 bits
-    if( CMAKE_SIZEOF_VOID_P EQUAL 8 )
-        set( CMAKE_INSTALL_PREFIX "C:/Program Files/Vector SIL Kit Adapter Bytestream Socket ${SILKIT_ADAPTER_BYTE_STREAM_SOCKET_VERSION}" CACHE PATH "Default install path" FORCE )
-    elseif( CMAKE_SIZEOF_VOID_P EQUAL 4 )
-        set( CMAKE_INSTALL_PREFIX "C:/Program Files (x86)/Vector SIL Kit Adapter Bytestream Socket ${SILKIT_ADAPTER_BYTE_STREAM_SOCKET_VERSION}" CACHE PATH "Default install path" FORCE )
-    endif()
+    if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+        # set the default install paths for Windows 32 and 64 bits
+        if( CMAKE_SIZEOF_VOID_P EQUAL 8 )
+            set( CMAKE_INSTALL_PREFIX "C:/Program Files/Vector SIL Kit Adapter Bytestream Socket ${SILKIT_ADAPTER_BYTE_STREAM_SOCKET_VERSION}" CACHE PATH "Default install path" FORCE )
+        elseif( CMAKE_SIZEOF_VOID_P EQUAL 4 )
+            set( CMAKE_INSTALL_PREFIX "C:/Program Files (x86)/Vector SIL Kit Adapter Bytestream Socket ${SILKIT_ADAPTER_BYTE_STREAM_SOCKET_VERSION}" CACHE PATH "Default install path" FORCE )
+        endif()
+    endif(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
 endif()
 
 install(
     DIRECTORY
-        adapter
-        common
+        ${CMAKE_CURRENT_SOURCE_DIR}/adapter
+        ${CMAKE_CURRENT_SOURCE_DIR}/common
 
     DESTINATION .
     COMPONENT source
@@ -92,7 +94,18 @@ else()
     )
 endif()
 
-# only SilKitAdapterByteStreamSocket should be installed to /usr/local/bin by calling --target install (therefore it is not excluded)
+install(
+    TARGETS 
+        SilKitDemoBytesPubSubEchoDevice
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT Runtime
+    PERMISSIONS
+        OWNER_READ OWNER_WRITE OWNER_EXECUTE
+        GROUP_READ GROUP_EXECUTE
+        WORLD_READ WORLD_EXECUTE    
+    EXCLUDE_FROM_ALL
+)
+
+# only sil-kit-adapter-byte-stream-socket should be installed to /usr/local/bin by calling --target install (therefore it is not excluded)
 install(
     TARGETS 
         sil-kit-adapter-byte-stream-socket

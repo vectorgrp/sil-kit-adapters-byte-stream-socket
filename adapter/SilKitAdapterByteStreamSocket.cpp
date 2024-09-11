@@ -15,12 +15,13 @@ using namespace adapters;
 using namespace util;
 
 const std::string adapters::bytestreamArg = "--socket-to-bytestream";
+const std::string adapters::defaultParticipantName = "SilKitAdapterByteStreamSocket";
 
 void print_help(bool userRequested = false)
 {
     std::cout << "Usage (defaults in curly braces if you omit the switch):" << std::endl
-        << "SilKitAdapterQemu [" << participantNameArg
-        << " <participant's name{SilKitAdapterQemu}>]\n"
+        << "sil-kit-adapter-byte-stream-socket [" << participantNameArg
+        << " <participant's name{"<< defaultParticipantName <<"}>]\n"
         "  ["
         << configurationArg
         << " <path to .silkit.yaml or .json configuration file>]\n"
@@ -29,7 +30,7 @@ void print_help(bool userRequested = false)
         << " silkit://<host{localhost}>:<port{8501}>]\n"
         "  ["
         << logLevelArg
-        << " <Trace|Debug|Warn|{Info}|Error|Critical|off>]\n"
+        << " <Trace|Debug|Warn|{Info}|Error|Critical|Off>]\n"
         " [["
         << bytestreamArg
         << "\n"
@@ -73,7 +74,7 @@ int main(int argc, char** argv)
         SilKit::Services::Orchestration::ILifecycleService* lifecycleService;
         std::promise<void> runningStatePromise;
 
-        std::string participantName = "SilKitAdapterByteStreamSocket";
+        std::string participantName = defaultParticipantName;
         const auto participant = CreateParticipant(argc, argv,
             logger, &participantName, &lifecycleService, &runningStatePromise);
 
@@ -85,16 +86,17 @@ int main(int argc, char** argv)
         unsigned numberOfRequestedAdaptations = 0;
 
         foreachArgDo(argc, argv, bytestreamArg, [&](char* arg) -> void {
-            std::cout << "!!!\n";
             ++numberOfRequestedAdaptations;
             transmitters.push_back(bytes_socket::SocketToBytesPubSubAdapter::parseArgument(arg,
                 alreadyProvidedSockets, participantName,
                 ioContext, participant.get(), logger));
             });
-        std::cout << "!!!!\n";
         
-        throwInvalidCliIf(numberOfRequestedAdaptations == 0);
-        std::cout << "!!!!!\n";
+        if(numberOfRequestedAdaptations == 0)
+        {
+            logger->Error("No " + bytestreamArg + " argument, exiting.");
+            throw InvalidCli();
+        }
         auto finalStateFuture = lifecycleService->StartLifecycle();
 
         std::thread ioContextThread([&]() -> void {

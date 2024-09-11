@@ -78,7 +78,7 @@ int main(int argc, char** argv)
         const auto participant = CreateParticipant(argc, argv,
             logger, &participantName, &lifecycleService, &runningStatePromise);
 
-        std::vector<bytes_socket::SocketToBytesPubSubAdapter*> transmitters;
+        std::vector<std::unique_ptr<bytes_socket::SocketToBytesPubSubAdapter>> transmitters;
 
         //set to ensure the provided sockets are unique (text-based)
         std::set<std::string> alreadyProvidedSockets;
@@ -87,7 +87,7 @@ int main(int argc, char** argv)
 
         foreachArgDo(argc, argv, bytestreamArg, [&](char* arg) -> void {
             ++numberOfRequestedAdaptations;
-            transmitters.push_back(bytes_socket::SocketToBytesPubSubAdapter::parseArgument(arg,
+            transmitters.emplace_back(bytes_socket::SocketToBytesPubSubAdapter::parseArgument(arg,
                 alreadyProvidedSockets, participantName,
                 ioContext, participant.get(), logger));
             });

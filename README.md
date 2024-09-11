@@ -99,9 +99,8 @@ Now you can attach without error a Byte Stream Socket Adapter to it:
 
     ./bin/sil-kit-adapter-byte-stream-socket --socket-to-bytestream localhost:1234,toSocket,fromSocket --log Debug
 
-The `--log Debug` argument requests the sil-kit-adapter-byte-stream-socket to print out `Debug` level information in the logging outputs (which by default is `stdio`). Therefore you will see the adapter sending to the topic the data that you input with `socat`. For instance, if you type:
+The `--log Debug` argument requests the sil-kit-adapter-byte-stream-socket to print out `Debug` level information in the logging outputs (which by default is `stdio`). Therefore you will see the adapter sending to the topic the data that you input with `socat`. For instance, if you type (finish by hitting enter):
 ````
-root@WSLUbuntu:~# socat TCP4-LISTEN:81 stdio
 Test 1
 ````
 
@@ -114,11 +113,13 @@ Press CTRL + C to stop the process...
 
 ````
 
-Now if you also run the `sil-kit-demo-byte-stream-echo-device` process, which is designed to subscribe to the topic `fromSocket` in order to send all messages received there to the topic `toSocket`, and type `Test 2` into `socat`'s standard input, you will see the following result:
+> The log will contain all characters being received from the socket, and since `socat` is transmitting a newline character when you type `Test 1` it will show up. It is more proeminently seeable in the next step when you do have a response
+
+Now you can run the `sil-kit-demo-byte-stream-echo-device` process:
+`./bin/sil-kit-demo-bytestream-echo-device --log Debug`
+It is designed to subscribe to the topic `fromSocket` in order to send all messages received there to the topic `toSocket`. Type `Test 2` into `socat`'s standard input, then you will see the following result:
 
 ````
-root@WSLUbuntu:~# socat TCP4-LISTEN:81 stdio
-Test 1
 Test 2
 Test 2
 ````

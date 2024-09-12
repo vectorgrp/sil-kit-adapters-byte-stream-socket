@@ -1,11 +1,5 @@
-cmake_minimum_required( VERSION 3.5 )
+cmake_minimum_required( VERSION 3.12 )
 project( VectorSilKitAdapterByteStreamSocket )
-
-set( CMAKE_BUILD_RPATH_USE_ORIGIN ON )
-
-set( CMAKE_EXPORT_COMPILE_COMMANDS ON )
-
-set( CMAKE_CXX_STANDARD 17 )
 
 set( SILKIT_ADAPTER_BYTE_STREAM_SOCKET_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin" )
 set( SILKIT_ADAPTER_BYTE_STREAM_SOCKET_LIBRARY_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/lib" )
@@ -14,7 +8,7 @@ set( SILKIT_ADAPTERS_DEMOS_OUTPUT_DIRECTORY "${SILKIT_ADAPTER_BYTE_STREAM_SOCKET
 set( SILKIT_ADAPTER_BYTE_STREAM_SOCKET_VERSION "1.0.0" )
 
 set( COMMON_DEMOS_TO_BUILD SilKitDemoBytesPubSubEchoDevice )
-include( common/CMakeLists.txt )
+include( common/cmake/CMakeLists.txt )
 set_target_properties( SilKitDemoBytesPubSubEchoDevice PROPERTIES OUTPUT_NAME "sil-kit-demo-byte-stream-echo-device" )
 
 add_subdirectory( adapter )

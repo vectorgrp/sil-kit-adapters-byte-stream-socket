@@ -113,7 +113,7 @@ Press CTRL + C to stop the process...
 
 ````
 
-> The log will contain all characters being received from the socket, and since `socat` is transmitting a newline character when you type `Test 1` it will show up. It is more proeminently seeable in the next step when you do have a response
+> The log will contain all characters being received from the socket, and since `socat` is transmitting a newline character when you type `Test 1` it will show up. It is more proeminently seeable in the next step when you do have a response.
 
 Now you can run the `sil-kit-demo-byte-stream-echo-device` process:
 `./bin/sil-kit-demo-bytestream-echo-device --log Debug`

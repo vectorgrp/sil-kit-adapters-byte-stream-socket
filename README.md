@@ -91,6 +91,8 @@ For instance, as is the case of the demo here, you can set up forwarding the sta
 
     socat TCP4-LISTEN:1234 stdio
 
+> Note that an interrupted `socat` may still be running, if you get an error that reads `Address already in use` you may try to remove all leftover processes by executing e.g. `killall socat`.
+
 Before you start the adapter, there always needs to be a sil-kit-registry running already. Start it e.g. like this:
 
     /path/to/SilKit-x.y.z-$platform/SilKit/bin/sil-kit-registry --listen-uri 'silkit://0.0.0.0:8501'

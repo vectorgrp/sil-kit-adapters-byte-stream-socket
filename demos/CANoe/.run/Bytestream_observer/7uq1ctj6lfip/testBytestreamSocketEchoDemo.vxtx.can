@@ -1,0 +1,30 @@
+﻿/* !Encoding: 65001  */
+includes
+{
+  #include "__VariablesLib.cin"
+  #include "__CaplGeneratorLib.cin"
+  #include "__CANoeReportFuntionsLib.cin"
+}
+
+variables
+{
+  // Global variables defined within this CAPL file
+}
+
+void Tt2e3nsq3_Tet_TtInit()
+{
+
+}
+
+void Tt2e3nsq3_Tet_CaplTcCall0()
+{
+  CreateCaplIFFunction("DO_WaitForSocketMessage", __eTcDef);
+  CallInterfaceFunction(__cEmpty , "", __cEmpty );
+}
+
+void Tt2e3nsq3_Tet_CaplTcCall1()
+{
+  CreateCaplIFFunction("DO_WaitForEchoMessage", __eTcDef);
+  CallInterfaceFunction(__cEmpty , "", __cEmpty );
+}
+

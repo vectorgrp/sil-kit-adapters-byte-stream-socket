@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ttroot
+  version="26" xmlns="http://www.vector-informatik.de/ITE/TestTable/1.0">
+  <tt>
+    <tf>
+      <title>BytestreamSocketTestFixture</title>
+      <capltestcase>
+        <title />
+        <name>DO_WaitForSocketMessage</name>
+      </capltestcase>
+      <capltestcase>
+        <title />
+        <name>DO_WaitForEchoMessage</name>
+      </capltestcase>
+    </tf>
+  </tt>
+  <ttlib>
+    <ts_definitions />
+    <tc_definitions />
+    <function_definitions />
+  </ttlib>
+</ttroot>

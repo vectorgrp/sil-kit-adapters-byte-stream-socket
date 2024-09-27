@@ -137,7 +137,9 @@ You will see what you inputted being printed again, and also the following in th
 
 ## Observing and/or testing the echo demo with CANoe (CANoe 17 SP3 or newer)
 
-Before you can connect CANoe to the SIL Kit network you should adapt the `RegistryUri` in `./chardev/demos/SilKitConfig_CANoe.silkit.yaml` to the IP address of your system where your sil-kit-registry is running (in case of a WSL2 Ubuntu image e.g. the IP address of Eth0). The configuration file is referenced by both following CANoe use cases (Desktop Edition and Server Edition).
+[//]: <> (TODO: restore a SIL Kit configuration file)
+
+Before you can connect CANoe to the SIL Kit network you should adapt the `RegistryUri` in `./demos/SilKitConfig_CANoe.silkit.yaml` to the IP address of your system where your sil-kit-registry is running (in case of a WSL2 Ubuntu image e.g. the IP address of Eth0). The configuration file is referenced by both following CANoe use cases (Desktop Edition and Server Edition).
 
 CANoe's Publisher/Subscriber counterpart are Distributed Objects. By nature, they are meant to convey their state to and from
 CANoe, but not simultaneously. Therefore, this CANoe demo will contain 2 such objects in order to demonstrate the
@@ -165,10 +167,12 @@ while sleep 1; do echo Test; done | socat TCP4-LISTEN:1234 stdio
 ```
 
 ### CANoe4SW Server Edition (Windows)
-You can also run the same test set with ``CANoe4SW SE`` by executing the following PowerShell script ``./chardev/demos/CANoe4SW_SE/run.ps1``. The test cases are executed automatically and you should see a short test report in PowerShell after execution.
+You can also run the same test set with ``CANoe4SW SE`` by executing the following PowerShell script ``./demos/CANoe4SW_SE/run.ps1``. The test cases are executed automatically and you should see a short test report in PowerShell after execution.
 
 ### CANoe4SW Server Edition (Linux)
-You can also run the same test set with ``CANoe4SW SE (Linux)``. At first you have to execute the PowerShell script ``./chardev/demos/CANoe4SW_SE/createEnvForLinux.ps1`` on your Windows system by using tools of ``CANoe4SW SE (Windows)`` to prepare your test environment for Linux. In ``./chardev/demos/CANoe4SW_SE/run.sh`` you should set ``canoe4sw_se_install_dir`` to the path of your ``CANoe4SW SE`` installation in your WSL. Afterwards you can execute ``./chardev/demos/CANoe4SW_SE/run.sh`` in your WSL. The test cases are executed automatically and you should see a short test report in your terminal after execution.
+You can also run the same test set with ``CANoe4SW SE (Linux)``. At first you have to execute the PowerShell script ``./demos/CANoe4SW_SE/createEnvForLinux.ps1`` on your Windows system by using tools of ``CANoe4SW SE (Windows)`` to prepare your test environment for Linux. In ``./demos/CANoe4SW_SE/run.sh`` you should set ``canoe4sw_se_install_dir`` to the path of your ``CANoe4SW SE`` installation in your WSL. Afterwards you can execute ``./demos/CANoe4SW_SE/run.sh`` in your WSL. The test cases are executed automatically and you should see a short test report in your terminal after execution.
+
+[//]: <> (TODO: finish this part)
 
 ## Demo with CANoe interaction (CANoe 17 SP3 or newer)
 This demo showcases sending data from CANoe Desktop to the serial port of QEMU.
@@ -181,10 +185,10 @@ a publisher on the other, ``toChardev``.
 After following the common demo steps above, first launch the adapter, which connects to the registry (to connect to other participants) and to QEMU,
 to transmit the serial data written to ``/dev/ttyS1`` inside QEMU through SIL Kit, and vice-versa:
 ```
-./bin/sil-kit-adapter-qemu --socket-to-chardev localhost:23456,Namespace::toChardev,VirtualNetwork=Default,Instance=EchoDevice,Namespace::fromChardev,VirtualNetwork:Default,Instance:Adapter --configuration ./chardev/demos/SilKitConfig_Adapter.silkit.yaml
-Creating participant 'SilKitAdapterQemu' at silkit://localhost:8501
-[date time] [SilKitAdapterQemu] [info] Creating participant 'SilKitAdapterQemu' at 'silkit://localhost:8501', SIL Kit version: 4.0.19
-[date time] [SilKitAdapterQemu] [info] Connected to registry at 'tcp://127.0.0.1:8501' via 'tcp://127.0.0.1:49224' (silkit://localhost:8501)
+./bin/sil-kit-adapter-byte-stream-socket --socket-to-bytestream localhost:23456,Namespace::toChardev,VirtualNetwork=Default,Instance=EchoDevice,Namespace::fromChardev,VirtualNetwork:Default,Instance:Adapter --configuration ./chardev/demos/SilKitConfig_Adapter.silkit.yaml
+Creating participant 'SilKitAdapterByteStreamSocket' at silkit://localhost:8501
+[date time] [SilKitAdapterByteStreamSocket] [info] Creating participant 'SilKitAdapterByteStreamSocket' at 'silkit://localhost:8501', SIL Kit version: 4.0.19
+[date time] [SilKitAdapterByteStreamSocket] [info] Connected to registry at 'tcp://127.0.0.1:8501' via 'tcp://127.0.0.1:49224' (silkit://localhost:8501)
 connect success
     ...
 ```
@@ -194,7 +198,7 @@ Then, you can start a dump of data sent through the link from the outside:
 root@silkit-qemu-demos-guest:~# cat /dev/ttyS1&
 ```
 Finally, launch CANoe and load the
-``Qemu_Chardev_demo_CANoe_device.cfg`` from the ``./chardev/demos/CANoe`` directory.
+``Bytestream_observer.cfg`` from the ``./demos/CANoe`` directory.
 
 Here is a small drawing to illustrate how CANoe is connected to QEMU:
 ```
@@ -218,5 +222,5 @@ Before you can connect CANoe to the SIL Kit network you should adapt the ``Regis
 
 Then launch the adapter and prepare to dialog with CANoe on its byte-oriented topics:
 ```
-./bin/sil-kit-adapter-qemu --socket-to-chardev localhost:23456,Namespace::degrees_user,VirtualNetwork=Default,Instance=UserTemp,Namespace::degrees_sensor,VirtualNetwork:Default,Instance:SensorTemp --registry-uri silkit://localhost:8501 --log Debug
+./bin/sil-kit-adapter-byte-stream-socket --socket-to-bytestreamlocalhost:23456,Namespace::degrees_user,VirtualNetwork=Default,Instance=UserTemp,Namespace::degrees_sensor,VirtualNetwork:Default,Instance:SensorTemp --registry-uri silkit://localhost:8501 --log Debug
 ```

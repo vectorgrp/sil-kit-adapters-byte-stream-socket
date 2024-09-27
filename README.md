@@ -93,7 +93,7 @@ For instance, as is the case of the demo here, you can set up forwarding the sta
 
 > Note that an interrupted `socat` may still be running, if you get an error that reads `Address already in use` you may try to remove all leftover processes by executing e.g. `killall socat`.
 
-Before you start the adapter, there always needs to be a sil-kit-registry running already. Start it e.g. like this:
+Remember: before you start the adapter, there always needs to be a sil-kit-registry running already. Start it e.g. like this:
 
     /path/to/SilKit-x.y.z-$platform/SilKit/bin/sil-kit-registry --listen-uri 'silkit://0.0.0.0:8501'
 
@@ -115,10 +115,12 @@ Press CTRL + C to stop the process...
 
 ````
 
-> The log will contain all characters being received from the socket, and since `socat` is transmitting a newline character when you type `Test 1` it will show up. It is more proeminently seeable in the next step when you do have a response.
+> The log will contain all characters being received from the socket, and since `socat` is transmitting a newline character when you type `Test 1` it will show up. It is more prominently visible in the next step when you do have a response.
 
 Now you can run the `sil-kit-demo-byte-stream-echo-device` process:
-`./bin/sil-kit-demo-bytestream-echo-device --log Debug`
+
+    `./bin/sil-kit-demo-bytestream-echo-device --log Debug`
+
 It is designed to subscribe to the topic `fromSocket` in order to send all messages received there to the topic `toSocket`. Type `Test 2` into `socat`'s standard input, then you will see the following result:
 
 ````
@@ -135,7 +137,7 @@ You will see what you inputted being printed again, and also the following in th
 
 ````
 
-## Observing and/or testing the echo demo with CANoe (CANoe 17 SP3 or newer)
+## Observing and testing the echo demo with CANoe (CANoe 17 SP3 or newer)
 
 [//]: <> (TODO: restore a SIL Kit configuration file)
 

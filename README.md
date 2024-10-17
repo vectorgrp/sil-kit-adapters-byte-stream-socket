@@ -91,6 +91,8 @@ For instance, as is the case of the demo here, you can set up forwarding the sta
 
     socat TCP4-LISTEN:1234 stdio
 
+Since `socat` is a Linux utility, you may use WSL to use it under Windows, or use the single-shot script `tools\socat.ps1` to use the demo 
+
 > Note that an interrupted `socat` may still be running, if you get an error that reads `Address already in use` you may try to remove all leftover processes by executing e.g. `killall socat`.
 
 Remember: before you start the adapter, there always needs to be a sil-kit-registry running already. Start it e.g. like this:

@@ -61,17 +61,17 @@ The application takes the following command line arguments (defaults in curly br
       [--log <Trace|Debug|Warn|{Info}|Error|Critical|Off>]
      [[--socket-to-bytestream
          <host>:<port>,
-        [<namespace>::]<toChardev topic name>[~<subscriber's name>]
+        [<namespace>::]<toAdapter topic name>[~<subscriber's name>]
            [[,<label key>:<optional label value>
             |,<label key>=<mandatory label value>
            ]],
-        [<namespace>::]<fromChardev topic name>[~<publisher's name>]
+        [<namespace>::]<fromAdapter topic name>[~<publisher's name>]
            [[,<label key>:<optional label value>
             |,<label key>=<mandatory label value>
            ]]
      ]]
 
-There needs to be at least one ``--socket-to-bytestream`` argument, and each socket need to be unique.
+There needs to be at least one ``--socket-to-bytestream`` argument, and each socket needs to be unique.
 
 SIL Kit-specific CLI arguments will be overwritten by the config file passed by ``--configuration``.
 
@@ -91,9 +91,9 @@ For instance, as is the case of the demo here, you can set up forwarding the sta
 
     socat TCP4-LISTEN:1234 stdio
 
-Since `socat` is a Linux utility, you may use WSL to use it under Windows, or use the single-shot script `tools\socat.ps1` to use the demo 
-
 > Note that an interrupted `socat` may still be running, if you get an error that reads `Address already in use` you may try to remove all leftover processes by executing e.g. `killall socat`.
+
+> Since `socat` is a Linux utility, you may use WSL to use it under Windows, or use the single-shot script `tools\socat.ps1` to use the demo. This script waits for a connection and then only sends "test" five times, before closing the connection. It will also not print back what it receives in the terminal. The debug feedback on the adapter, however, is still the same.
 
 Remember: before you start the adapter, there always needs to be a sil-kit-registry running already. Start it e.g. like this:
 
@@ -121,7 +121,7 @@ Press CTRL + C to stop the process...
 
 Now you can run the `sil-kit-demo-byte-stream-echo-device` process:
 
-    `./bin/sil-kit-demo-bytestream-echo-device --log Debug`
+    ./bin/sil-kit-demo-bytestream-echo-device --log Debug
 
 It is designed to subscribe to the topic `fromSocket` in order to send all messages received there to the topic `toSocket`. Type `Test 2` into `socat`'s standard input, then you will see the following result:
 
@@ -149,16 +149,16 @@ observation capability.
 
 Here is a small drawing to illustrate how CANoe observes the topics (the observation happens in SIL Kit's network):
 ```
-      CANoe Observation
-                     \
-+----[SIL Kit]------+ \       > fromSocket >         +----[SIL Kit]----+
-|                   |__)_____________________________|                 |
-| BytestreamAdapter |                                |    EchoDevice   |
-|                   |________________________________|                 |
-|                   |          < toSocket <        / |                 |
-+-------------------+                             (  +-----------------+
-                                                   \
-                                                CANoe Observation
+                   CANoe Observation
+                                  \
++-----------[SIL Kit]------------+ \       > fromSocket >         +----[SIL Kit]----+
+|                                |__)_____________________________|                 |
+| SilKitAdapterByteStreamSocket  |                                |    EchoDevice   |
+|                                |________________________________|                 |
+|                                |          < toSocket <        / |                 |
++--------------------------------+                             (  +-----------------+
+                                                                \
+                                                             CANoe Observation
 ```
 
 ### CANoe Desktop Edition

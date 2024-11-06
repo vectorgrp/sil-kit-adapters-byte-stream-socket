@@ -1,0 +1,6 @@
+[NStatePersistence]
+Signature=VectorStatePersistence
+[VGlobalMeasurementIndex]
+mMeasurementIndex=3
+[VTestConfigurationConfigData]
+testBytestreamSocketDemo_NextTestRun=1

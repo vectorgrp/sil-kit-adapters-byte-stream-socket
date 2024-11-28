@@ -26,7 +26,7 @@ export testcase DO_WaitForSocketMessage()
 {
   fromSocket_object.Connect();
   result = testWaitForUpdate(Namespace::Adapter.fromSocket,timeout);
-  CheckTestResult("DO_WaitForQemuMessage", result);
+  CheckTestResult("DO_WaitForSocketMessage", result);
 }
 
 export testcase DO_WaitForEchoMessage()

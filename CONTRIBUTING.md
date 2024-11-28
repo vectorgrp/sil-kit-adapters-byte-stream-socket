@@ -1,6 +1,6 @@
 # Contributing to Vector SIL Kit Adapter Byte Stream Socket
 
-Welcome and thank you for your interest in contributing to the Vector SIL Kit Adapter for Byte Stream Sockets
+Welcome and thank you for your interest in contributing to the Vector SIL Kit Adapter for Byte Stream Socket
 open source project.
 
 We are sorry, but at the moment, we do not accept external contributions until

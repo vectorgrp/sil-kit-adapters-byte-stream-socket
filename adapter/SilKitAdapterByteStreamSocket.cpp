@@ -14,7 +14,7 @@
 using namespace adapters;
 using namespace util;
 
-const std::string adapters::bytestreamArg = "--socket-to-bytestream";
+const std::string adapters::bytestreamArg = "--socket-to-byte-stream";
 const std::string adapters::defaultParticipantName = "SilKitAdapterByteStreamSocket";
 
 void print_help(bool userRequested = false)

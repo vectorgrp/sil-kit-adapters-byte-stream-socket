@@ -1,13 +1,13 @@
-# Vector SIL Kit Adapter for Byte Stream Sockets
+# Vector SIL Kit Adapter for Byte Stream Socket
 This collection of software is provided to illustrate how the [Vector SIL Kit](https://github.com/vectorgrp/sil-kit/) can bridge any socket and transmit the content between it and a pair of SIL Kit Topics.
 
 This repository contains instructions to set up development environment and build the adapter, as well as a simple demo to showcase the functionality.
 
 # Getting Started
-Those instructions assume you use WSL (Ubuntu) or a Linux OS for building and running the adapter (nevertheless it is also possible to do this directly on a Windows system, with the exception of setting up the QEMU image), and use ``bash`` as your interactive shell.
+Those instructions assume you use WSL (Ubuntu) or a Linux OS for building and running the adapter (nevertheless it is also possible to do this directly on a Windows system, and use ``bash`` as your interactive shell.
 
 ## a) Getting Started with pre-built Adapter and Demos
-Download a preview or release of the adapter directly from [Vector SIL Kit for Byte Stream Sockets Releases](https://github.com/vectorgrp/sil-kit-adapters-byte-stream-socket/releases).
+Download a preview or release of the adapter directly from [Vector SIL Kit for Byte Stream Socket Releases](https://github.com/vectorgrp/sil-kit-adapters-byte-stream-socket/releases).
 
 If not already existent on your system you should also download a SIL Kit Release directly from [Vector SIL Kit Releases](https://github.com/vectorgrp/sil-kit/releases). You will need this for being able to start a sil-kit-registry.
 
@@ -43,7 +43,7 @@ The adapter and demo executables will be available in the ``bin`` directory as w
 
 
 # Run the sil-kit-adapter-byte-stream-socket
-This application allows the user to attach to a web socket in order to bridge it to the SIL Kit:
+This application allows the user to attach to a network socket in order to bridge it to the SIL Kit:
 
 All data received from the socket will be sent to the publish topic specified to sil-kit-adapter-byte-stream-socket.
 All data received on the subscribed topic specified to sil-kit-adapter-byte-stream-socket will be sent to the socket.
@@ -59,7 +59,7 @@ The application takes the following command line arguments (defaults in curly br
       [--configuration <path to .silkit.yaml or .json configuration file>]
       [--registry-uri silkit://<host{localhost}>:<port{8501}>]
       [--log <Trace|Debug|Warn|{Info}|Error|Critical|Off>]
-     [[--socket-to-bytestream
+     [[--socket-to-byte-stream
          <host>:<port>,
         [<namespace>::]<toAdapter topic name>[~<subscriber's name>]
            [[,<label key>:<optional label value>
@@ -71,23 +71,23 @@ The application takes the following command line arguments (defaults in curly br
            ]]
      ]]
 
-There needs to be at least one ``--socket-to-bytestream`` argument, and each socket needs to be unique.
+There needs to be at least one ``--socket-to-byte-stream`` argument, and each socket needs to be unique.
 
 SIL Kit-specific CLI arguments will be overwritten by the config file passed by ``--configuration``.
 
 > **Example:**
 Here is an example that runs the Byte Stream Socket Adapter and demonstrates the basic form of parameters that the adapter takes into account: 
 > 
->     sil-kit-adapter-byte-stream-socket --name BytesSocketBridge --socket-to-bytestream localhost:81,toSocket,fromSocket
+>     sil-kit-adapter-byte-stream-socket --name BytesSocketBridge --socket-to-byte-stream localhost:81,toSocket,fromSocket
 >
 > In this example, the adapter has `BytesSocketBridge` as participant name, and uses the default values for SIL Kit URI connection (`silkit://localhost:8501`). `localhost` and port `81` are used to establish a socket connection to a source of bidirectional data. When the socket is emitting data, the adapter will send it to the topic named `fromSocket`, and when data arrive on the `toSocket` topic, they are sent through the socket.
 
 ## Socat Demo
 This demo application allows the user to attach a `socat` process to the SIL Kit in the form of a DataPublisher/DataSubscriber, and echo the data sent forward and back via the SIL Kit.
 
-`socat` is a Linux utility which allows to pipe data between two channels, and it supports a wide range of protocols including web sockets.
+`socat` is a Linux utility which allows to pipe data between two channels, and it supports a wide range of protocols including network sockets.
 
-For instance, as is the case of the demo here, you can set up forwarding the standard input and output of a terminal to a websocket (TCP on port 81) waiting for a peer with the following command:
+For instance, as is the case of the demo here, you can set up forwarding the standard input and output of a terminal to a socket (TCP on port 81) waiting for a peer with the following command:
 
     socat TCP4-LISTEN:1234 stdio
 
@@ -99,9 +99,9 @@ Remember: before you start the adapter, there always needs to be a sil-kit-regis
 
     /path/to/SilKit-x.y.z-$platform/SilKit/bin/sil-kit-registry --listen-uri 'silkit://0.0.0.0:8501'
 
-Now you can attach without error a Byte Stream Socket Adapter to it:
+Now you can start the Byte Stream Socket Adapter:
 
-    ./bin/sil-kit-adapter-byte-stream-socket --socket-to-bytestream localhost:1234,toSocket,fromSocket --log Debug
+    ./bin/sil-kit-adapter-byte-stream-socket --socket-to-byte-stream localhost:1234,toSocket,fromSocket --log Debug
 
 The `--log Debug` argument requests the sil-kit-adapter-byte-stream-socket to print out `Debug` level information in the logging outputs (which by default is `stdio`). Therefore you will see the adapter sending to the topic the data that you input with `socat`. For instance, if you type (finish by hitting enter):
 ````
@@ -121,7 +121,7 @@ Press CTRL + C to stop the process...
 
 Now you can run the `sil-kit-demo-byte-stream-echo-device` process:
 
-    ./bin/sil-kit-demo-bytestream-echo-device --log Debug
+    ./bin/sil-kit-demo-byte-stream-echo-device --log Debug
 
 It is designed to subscribe to the topic `fromSocket` in order to send all messages received there to the topic `toSocket`. Type `Test 2` into `socat`'s standard input, then you will see the following result:
 

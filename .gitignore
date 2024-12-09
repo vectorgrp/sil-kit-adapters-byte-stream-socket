@@ -1,0 +1,7 @@
+/out/
+/.vs*/
+/build/
+/install/
+bin
+lib
+Downloads

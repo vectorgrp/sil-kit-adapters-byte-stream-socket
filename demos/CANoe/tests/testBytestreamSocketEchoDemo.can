@@ -1,0 +1,37 @@
+﻿/*@!Encoding:65001*/
+includes
+{
+  
+}
+
+
+variables
+{
+  distObjRef *toSocket_object = Namespace::EchoDevice;
+  distObjRef *fromSocket_object = Namespace::Adapter;
+  int result;
+  dword timeout=2000;
+}
+
+void CheckTestResult(char testName[], int result)
+{
+  if (result != 1)
+  {
+    TestStepFail(testName, "FAILED: No message within timeout");
+  }
+  TestStepPass(testName, "SUCCESS");
+}
+
+export testcase DO_WaitForSocketMessage()
+{
+  fromSocket_object.Connect();
+  result = testWaitForUpdate(Namespace::Adapter.fromSocket,timeout);
+  CheckTestResult("DO_WaitForSocketMessage", result);
+}
+
+export testcase DO_WaitForEchoMessage()
+{
+  toSocket_object.Connect();
+  result = testWaitForUpdate(Namespace::EchoDevice.toSocket,timeout);
+  CheckTestResult("DO_WaitForEchoMessage", result);
+}

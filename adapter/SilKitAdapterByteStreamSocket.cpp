@@ -6,15 +6,16 @@
 #include <iostream>
 #include <chrono>
 
-#include "adapter/Cli.hpp"
-#include "util/Parsing.hpp"
-#include "adapter/ParticipantCreation.hpp"
-#include "adapter/SocketToBytesPubSubAdapter.hpp"
+#include "common/Cli.hpp"
+#include "common/Parsing.hpp"
+#include "common/ParticipantCreation.hpp"
+#include "common/SocketToBytesPubSubAdapter.hpp"
 
 using namespace adapters;
 using namespace util;
 
 const std::string adapters::bytestreamArg = "--socket-to-byte-stream";
+const std::string adapters::unixBytestreamArg = "--unix-socket-to-byte-stream";
 const std::string adapters::defaultParticipantName = "SilKitAdapterByteStreamSocket";
 
 void print_help(bool userRequested = false)
@@ -34,7 +35,12 @@ void print_help(bool userRequested = false)
         " [["
         << bytestreamArg
         << "\n"
-        << bytes_socket::SocketToBytesPubSubAdapter::printArgumentHelp()
+        << bytes_socket::SocketToBytesPubSubAdapter::printArgumentHelp("<host>:<port>", "    ")
+        << " ]]\n"
+        << " [["
+        << unixBytestreamArg
+        << "\n"
+        << bytes_socket::SocketToBytesPubSubAdapter::printArgumentHelp("<path to socket identifier>", "    ")
         << " ]]\n"
         "\n"
         "There needs to be at least one "
@@ -66,8 +72,8 @@ int main(int argc, char** argv)
     try
     {
         throwInvalidCliIf(thereAreUnknownArguments(argc, argv, 
-            { &bytestreamArg,      &regUriArg,       &logLevelArg,
-              &participantNameArg, &configurationArg },
+            { &bytestreamArg,      &regUriArg,        &logLevelArg,
+              &participantNameArg, &configurationArg, &unixBytestreamArg },
             { &helpArg }));
 
         SilKit::Services::Logging::ILogger* logger;
@@ -89,7 +95,14 @@ int main(int argc, char** argv)
             ++numberOfRequestedAdaptations;
             transmitters.emplace_back(bytes_socket::SocketToBytesPubSubAdapter::parseArgument(arg,
                 alreadyProvidedSockets, participantName,
-                ioContext, participant.get(), logger));
+                ioContext, participant.get(), logger, false));
+            });
+
+        foreachArgDo(argc, argv, unixBytestreamArg, [&](char* arg) -> void {
+            ++numberOfRequestedAdaptations;
+            transmitters.emplace_back(bytes_socket::SocketToBytesPubSubAdapter::parseArgument(arg,
+                alreadyProvidedSockets, participantName,
+                ioContext, participant.get(), logger, true));
             });
         
         if(numberOfRequestedAdaptations == 0)

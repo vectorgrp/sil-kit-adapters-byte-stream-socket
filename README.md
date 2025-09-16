@@ -70,8 +70,19 @@ The application takes the following command line arguments (defaults in curly br
             |,<label key>=<mandatory label value>
            ]]
      ]]
+     [[--unix-socket-to-byte-stream
+         <path to socket identifier>,
+        [<namespace>::]<toAdapter topic name>[~<subscriber's name>]
+           [[,<label key>:<optional label value>
+            |,<label key>=<mandatory label value>
+           ]],
+        [<namespace>::]<fromAdapter topic name>[~<publisher's name>]
+           [[,<label key>:<optional label value>
+            |,<label key>=<mandatory label value>
+           ]]
+     ]]
 
-There needs to be at least one ``--socket-to-byte-stream`` argument, and each socket needs to be unique.
+There needs to be at least one ``--socket-to-byte-stream`` or ``--unix-socket-to-byte-stream`` argument, and each socket needs to be unique.
 
 SIL Kit-specific CLI arguments will be overwritten by the config file passed by ``--configuration``.
 
@@ -138,6 +149,16 @@ You will see what you inputted being printed again, and also the following in th
 [date time] [SilKitAdapterByteStreamSocket] [debug] SIL Kit >> Adapter: Test 2
 
 ````
+
+**Note:** If you want to use UNIX domain sockets instead of TCP sockets, the adapter can be started as follows 
+```
+./bin/sil-kit-adapter-byte-stream-socket --unix-socket-to-byte-stream PATH,toSocket,fromSocket --log Debug
+```
+
+where PATH needs to be replaced by an actual filesystem location representing the socket address. If you are using a Linux OS, you may choose PATH=/tmp/socket. In case of a Windows system, PATH=C:\Users\MyUser\AppData\Local\Temp\qemu.socket is a possible choice. 
+Note that the socat command also needs to be adapted:
+
+    socat UNIX-LISTEN:PATH stdio
 
 ## Observing and testing the echo demo with CANoe (CANoe 17 SP3 or newer)
 

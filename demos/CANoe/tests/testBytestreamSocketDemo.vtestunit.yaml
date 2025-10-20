@@ -1,8 +1,0 @@
-version: 2.0.0
-
-test-unit-information:
-  description: This test unit tests the basic functionality of receiving and sending binary data through a socket.
-  
-test-unit-implementation:
-  - source-file-path: testBytestreamSocketEchoDemo.can
-  - source-file-path: testBytestreamSocketEchoDemo.vtesttree.yaml

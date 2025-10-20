@@ -1,7 +1,17 @@
+#ignore directories made by Visual Studio
 /out/
 /.vs*/
+
+#ignore directories made by cmake
+Downloads
 /build/
 /install/
 bin
 lib
-Downloads
+
+#ignore outputs of CANoe or scripts
+logs
+Default.venvironment
+*.vtestunit
+working-dir
+.run

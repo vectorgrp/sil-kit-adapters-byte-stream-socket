@@ -91,14 +91,14 @@ Here is an example that runs the Byte Stream Socket Adapter and demonstrates the
 > 
 >     sil-kit-adapter-byte-stream-socket --name BytesSocketBridge --socket-to-byte-stream localhost:81,toSocket,fromSocket
 >
-> In this example, the adapter has `BytesSocketBridge` as participant name, and uses the default values for SIL Kit URI connection (`silkit://localhost:8501`). `localhost` and port `81` are used to establish a socket connection to a source of bidirectional data. When the socket is emitting data, the adapter will send it to the topic named `fromSocket`, and when data arrive on the `toSocket` topic, they are sent through the socket.
+> In this example, the adapter has `BytesSocketBridge` as participant name, and uses the default values for SIL Kit URI connection (`silkit://localhost:8501`). `localhost` and port `81` are used to establish a socket connection to a source of bidirectional data. When the socket is emitting data, the adapter will send them to the topic named `fromSocket`, and when data arrive on the `toSocket` topic, they are sent through the socket.
 
 ## Socat Demo
 This demo application allows the user to attach a `socat` process to the SIL Kit in the form of a DataPublisher/DataSubscriber, and echo the data sent forward and back via the SIL Kit.
 
 `socat` is a Linux utility which allows to pipe data between two channels, and it supports a wide range of protocols including network sockets.
 
-For instance, as is the case of the demo here, you can set up forwarding the standard input and output of a terminal to a socket (TCP on port 81) waiting for a peer with the following command:
+For instance, as is the case of the demo here, you can set up forwarding the standard input and output of a terminal to a socket (TCP on port 1234) waiting for a peer with the following command:
 
     socat TCP4-LISTEN:1234 stdio
 
@@ -134,7 +134,7 @@ Now you can run the `sil-kit-demo-byte-stream-echo-device` process:
 
     ./bin/sil-kit-demo-byte-stream-echo-device --log Debug
 
-It is designed to subscribe to the topic `fromSocket` in order to send all messages received there to the topic `toSocket`. Type `Test 2` into `socat`'s standard input, then you will see the following result:
+It is designed to subscribe to the topic `fromSocket` in order to send all messages received there back to the topic `toSocket`. Type `Test 2` into `socat`'s standard input, then you will see the following result:
 
 ````
 Test 2
@@ -190,3 +190,9 @@ Optionally you can also start the test unit execution of included test configura
 ```
 while sleep 1; do echo Test; done | socat TCP4-LISTEN:1234 stdio
 ```
+
+### CANoe4SW Server Edition (Windows)
+You can also run the same test set with ``CANoe4SW SE`` by executing the following PowerShell script ``./demos/CANoe4SW_SE/run.ps1``. The test cases are executed automatically and you should see a short test report in PowerShell after execution.
+
+### CANoe4SW Server Edition (Linux)
+You can also run the same test set with ``CANoe4SW SE (Linux)``. At first you have to execute the PowerShell script ``./demos/CANoe4SW_SE/createEnvForLinux.ps1`` on your Windows system by using tools of ``CANoe4SW SE (Windows)`` to prepare your test environment for Linux. In ``./demos/CANoe4SW_SE/run.sh`` you should set ``canoe4sw_se_install_dir`` to the path of your ``CANoe4SW SE`` installation in your WSL. Afterwards you can execute ``./demos/CANoe4SW_SE/run.sh`` in your WSL. The test cases are executed automatically and you should see a short test report in your terminal after execution.

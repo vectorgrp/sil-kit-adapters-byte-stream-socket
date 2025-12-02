@@ -1,9 +1,0 @@
-[NStatePersistence]
-Signature=VectorStatePersistence
-[VGlobalMeasurementIndex]
-mMeasurementIndex=4
-[VTestConfigurationConfigData]
-testBytestreamSocketEchoDemo_NextTestRun=2
-[VTestExecutable]
-testBytestreamSocketEchoDemo_LastReportFile=Report_testBytestreamSocketEchoDemo.vtestreport
-testBytestreamSocketEchoDemo_LastReportTmpFile=rpt609a.vtestreport

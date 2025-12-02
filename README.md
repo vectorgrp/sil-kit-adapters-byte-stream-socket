@@ -93,18 +93,22 @@ Here is an example that runs the Byte Stream Socket Adapter and demonstrates the
 >
 > In this example, the adapter has `BytesSocketBridge` as participant name, and uses the default values for SIL Kit URI connection (`silkit://localhost:8501`). `localhost` and port `81` are used to establish a socket connection to a source of bidirectional data. When the socket is emitting data, the adapter will send them to the topic named `fromSocket`, and when data arrive on the `toSocket` topic, they are sent through the socket.
 
-## Socat Demo
+## Echo Server Demo
 This demo application allows the user to attach a `socat` process to the SIL Kit in the form of a DataPublisher/DataSubscriber, and echo the data sent forward and back via the SIL Kit.
 
 `socat` is a Linux utility which allows to pipe data between two channels, and it supports a wide range of protocols including network sockets.
 
-For instance, as is the case of the demo here, you can set up forwarding the standard input and output of a terminal to a socket (TCP on port 1234) waiting for a peer with the following command:
+In this demo, the echo server using socat has been wrapped into the `echo_server.sh` script located in the `tools` folder. You can run it as follows, it will wait for a peer on port 1234:
 
-    socat TCP4-LISTEN:1234 stdio
+```
+./tools/echo_server.sh 1234
+[info] TCP server awaiting connection on port 1234...
+[info] Press CTRL + C to stop the process...
+```
 
 > Note that an interrupted `socat` may still be running, if you get an error that reads `Address already in use` you may try to remove all leftover processes by executing e.g. `killall socat`.
 
-> Since `socat` is a Linux utility, you may use WSL to use it under Windows, or use the single-shot script `tools\socat.ps1` to use the demo. This script waits for a connection and then only sends "test" five times, before closing the connection. It will also not print back what it receives in the terminal. The debug feedback on the adapter, however, is still the same.
+> If you are using a Windows system, you can run the `./tools/echo_server.ps1` script in the same way.
 
 Remember: before you start the adapter, there always needs to be a sil-kit-registry running already. Start it e.g. like this:
 
@@ -114,40 +118,33 @@ Now you can start the Byte Stream Socket Adapter:
 
     ./bin/sil-kit-adapter-byte-stream-socket --socket-to-byte-stream localhost:1234,toSocket,fromSocket --log Debug
 
-The `--log Debug` argument requests the sil-kit-adapter-byte-stream-socket to print out `Debug` level information in the logging outputs (which by default is `stdio`). Therefore you will see the adapter sending to the topic the data that you input with `socat`. For instance, if you type (finish by hitting enter):
+The `--log Debug` argument requests the sil-kit-adapter-byte-stream-socket to print out `Debug` level information in the logging outputs (which by default is `stdio`). 
+
+### Automatic Sender Demo Participant
+
+The sil-kit-demo-byte-stream-socket-auto-sender application is a SIL Kit participant that automatically sends `test message <id>` through the toSocket topic and receives echoed data on the fromSocket topic. You can run it as follows:
+```
+./bin/sil-kit-demo-byte-stream-socket-auto-sender
+[date time] [ByteStreamSocketAutoSender] [info] Creating participant, ParticipantName: ByteStreamSocketAutoSender, RegistryUri: silkit://localhost:8501, SilKitVersion: 5.0.1
+[date time] [ByteStreamSocketAutoSender] [info] Connected to registry at 'tcp://127.0.0.1:8501' via 'tcp://127.0.0.1:53768' (local:///tmp/SilKitRegi54d2044f72372c68.silkit, tcp://localhost:8501)
+[date time] [ByteStreamSocketAutoSender] [info] Press CTRL + C to stop the process...
+[date time] [ByteStreamSocketAutoSender] [info] AutoSender >> Adapter: test message 0
+[date time] [ByteStreamSocketAutoSender] [info] Adapter >> AutoSender: test message 0
+[date time] [ByteStreamSocketAutoSender] [info] AutoSender >> Adapter: test message 1
+[date time] [ByteStreamSocketAutoSender] [info] Adapter >> AutoSender: test message 1
+...
+```
+
+> The `<id>` starts to 0 and increments by one every two seconds.
+
+> The demo participant connects to the registry at `localhost:8501` by default. Run `./bin/sil-kit-demo-byte-stream-socket-auto-sender --help` to see additional information.
+
+On the terminal where you started the echo_server you should see the following output:
 ````
-Test 1
-````
-
-You will notice the following output in the sil-kit-adapter-byte-stream-socket terminal:
-````
-[date time] [SilKitAdapterByteStreamSocket] [debug] Updating participant status for SilKitAdapterByteStreamSocket from ReadyToRun to Running
-[date time] [SilKitAdapterByteStreamSocket] [debug] The participant state has changed for SilKitAdapterByteStreamSocket
-Press CTRL + C to stop the process...
-[date time] [SilKitAdapterByteStreamSocket] [debug] Adapter >> SIL Kit: Test 1
-
-````
-
-> The log will contain all characters being received from the socket, and since `socat` is transmitting a newline character when you type `Test 1` it will show up. It is more prominently visible in the next step when you do have a response.
-
-Now you can run the `sil-kit-demo-byte-stream-echo-device` process:
-
-    ./bin/sil-kit-demo-byte-stream-echo-device --log Debug
-
-It is designed to subscribe to the topic `fromSocket` in order to send all messages received there back to the topic `toSocket`. Type `Test 2` into `socat`'s standard input, then you will see the following result:
-
-````
-Test 2
-Test 2
-````
-
-You will see what you inputted being printed again, and also the following in the output in the sil-kit-adapter-byte-stream-socket terminal:
-
-````
-[date time] [SilKitAdapterByteStreamSocket] [debug] Adapter >> SIL Kit: Test 2
-
-[date time] [SilKitAdapterByteStreamSocket] [debug] SIL Kit >> Adapter: Test 2
-
+test message 0< 2025/11/27 10:15:28.105357  length=14 from=0 to=13
+test message 0> 2025/11/27 10:15:30.108935  length=14 from=14 to=27
+test message 1< 2025/11/27 10:15:30.109592  length=14 from=14 to=27
+test message 1> 2025/11/27 10:15:32.109546  length=14 from=28 to=41
 ````
 
 **Note:** If you want to use UNIX domain sockets instead of TCP sockets, the adapter can be started as follows 
@@ -156,43 +153,67 @@ You will see what you inputted being printed again, and also the following in th
 ```
 
 where PATH needs to be replaced by an actual filesystem location representing the socket address. If you are using a Linux OS, you may choose PATH=/tmp/socket. In case of a Windows system, PATH=C:\Users\MyUser\AppData\Local\Temp\qemu.socket is a possible choice. 
-Note that the socat command also needs to be adapted:
+Note that the socat command also needs to be adapted in the echo_server.sh script:
 
-    socat UNIX-LISTEN:PATH stdio
+    socat UNIX-LISTEN:PATH stdio,fork SYSTEM:"cat"
 
-## Observing and testing the echo demo with CANoe (CANoe 17 SP3 or newer)
+In the following diagram you can see the whole setup. It illustrates the data flow going through each component involved.
+```
+                +--[ echo_server ]--+                              +--[ SIL Kit Adapter Byte Stream Socket ]--+
+                |   socket <1234>   |< -------------------------- >|                                          |
+                +-------------------+                              +------------------------------------------+
+                                                                                        ^
+                                                                                        |
+                                                                                        |
+                                                SIL Kit topics:                         |
+                                                                                        |
+    +--[ SilKitDemoByteStream- ]--+               > toSocket >                          v
+    |     SocketAutoSender        |----        ------------------            +--[ SIL Kit Registry ]--+
+    +-----------------------------+    |      /                  \           |                        |
+                                       |------                    -----------|                        |
+       +----[ Vector CANoe ]---+       |      \                  /           |                        |
+       |                       |-------        ------------------            |                        |
+       +-----------------------+                 < fromSocket <              +------------------------+
+```
+
+## Observing and testing the echo demo with CANoe (CANoe 19 SP3 or newer)
 
 Before you can connect CANoe to the SIL Kit network you should adapt the `RegistryUri` in `./demos/SilKitConfig_CANoe.silkit.yaml` to the IP address of your system where your sil-kit-registry is running (in case of a WSL2 Ubuntu image e.g. the IP address of Eth0).
 
-CANoe's Publisher/Subscriber counterpart are Distributed Objects. By nature, they are meant to convey their state to and from
-CANoe, but not simultaneously. Therefore, this CANoe demo will contain 2 such objects in order to demonstrate the
-observation capability.
-
-Here is a small drawing to illustrate how CANoe observes the topics (the observation happens in SIL Kit's network):
-```
-                   CANoe Observation
-                                  \
-+-----------[SIL Kit]------------+ \       > fromSocket >         +----[SIL Kit]----+
-|                                |__)_____________________________|                 |
-| SilKitAdapterByteStreamSocket  |                                |    EchoDevice   |
-|                                |________________________________|                 |
-|                                |          < toSocket <        / |                 |
-+--------------------------------+                             (  +-----------------+
-                                                                \
-                                                             CANoe Observation
-```
-
 ### CANoe Desktop Edition
-Load the ``Bytestream_observer.cfg`` from the ``./demos/CANoe`` directory and start the measurement.
+Load the ``Bytestream.cfg`` from the ``./demos/CANoe`` directory and start the measurement.
 
-#### Tests in CANoe Desktop Edition
-Optionally you can also start the test unit execution of included test configuration. While the demo is running, these tests should be successful. The advised way to "run" the demo for the test to be successful while you focus on it is to execute the following commands in the terminal:
-```
-while sleep 1; do echo Test; done | socat TCP4-LISTEN:1234 stdio
-```
+Before doing this it makes sense to stop the AutoSender application first. Optionally you can also start the test unit execution of included test configuration. While the demo server is running the test should be successful. It sends "test message" through the toSocket topic, then receives it on the fromSocket one.
 
 ### CANoe4SW Server Edition (Windows)
 You can also run the same test set with ``CANoe4SW SE`` by executing the following PowerShell script ``./demos/CANoe4SW_SE/run.ps1``. The test cases are executed automatically and you should see a short test report in PowerShell after execution.
 
 ### CANoe4SW Server Edition (Linux)
-You can also run the same test set with ``CANoe4SW SE (Linux)``. At first you have to execute the PowerShell script ``./demos/CANoe4SW_SE/createEnvForLinux.ps1`` on your Windows system by using tools of ``CANoe4SW SE (Windows)`` to prepare your test environment for Linux. In ``./demos/CANoe4SW_SE/run.sh`` you should set ``canoe4sw_se_install_dir`` to the path of your ``CANoe4SW SE`` installation in your WSL. Afterwards you can execute ``./demos/CANoe4SW_SE/run.sh`` in your WSL. The test cases are executed automatically and you should see a short test report in your terminal after execution.
+You can also run the same test set with CANoe4SW SE 19 SP3 or newer (Linux). In demos/CANoe4SW_SE/run.sh you should adapt `canoe4sw_se_install_dir` to the path of your CANoe4SW SE installation. Afterwards, you can execute demos/CANoe4SW_SE/run.sh. The CANoe4SW SE environment is created and test cases are executed automatically. You should see a short test report in your terminal after execution.
+
+**Note:** CANoe4SW SE environment creation is only possible in Linux since CANoe4SW SE 19 SP3. If you are using an older version, first run the demos/CANoe4SW_SE/createEnvForLinux.ps1 Powershell script on your Windows system using the CANoe4SW SE (Windows) tools to set up the Linux test environment. Then, copy the `Default.venvironment` and `testBytestreamSocketEchoDemo.vtestunit` folders into the demos/CANoe4SW_SE directory on your Linux system. After that, you can execute the demos/CANoe4SW_SE/run.sh script.
+
+## Using the SIL Kit Dashboard
+
+For general instructions and features, see the documentation in [common/demos/README.md](https://github.com/vectorgrp/sil-kit-adapters-common/blob/main/docs/sil-kit-dashboard/README.md).
+
+### Steps for the Demo
+
+1. Start the SIL Kit registry with dashboard support:
+    ```
+    /path/to/SilKit-x.y.z-$platform/SilKit/bin/sil-kit-registry --listen-uri 'silkit://0.0.0.0:8501' --dashboard-uri http://localhost:8082
+    ```
+
+2. Launch the Byte Stream Socket adapter and demo participants as described above.
+
+    > With SIL Kit Dashboard version 1.1.0 or newer, you can configure the participant configuration file to enable all available metrics. See the [SIL Kit documentation](https://github.com/vectorgrp/sil-kit/blob/main/docs/troubleshooting/advanced.rst) for details.
+
+3. Open your web browser and navigate to [http://localhost:8080/dashboard](http://localhost:8080/dashboard).
+
+4. In the dashboard, select the registry URI (e.g., `silkit://localhost:8501`).
+
+5. In the participant tab, you should see `SilKitAdapterByteStreamSocket`, `ByteStreamSocketAutoSender`, and any other participants (such as CANoe).
+
+6. Click on `SilKitAdapterByteStreamSocket` and look under `Data / RPC Services` to find the Data Publisher/Subscriber with the topic names `fromSocket` and `toSocket` and their labels.
+
+7. Use the dashboard to monitor participant status and troubleshoot issues specific to the demo.

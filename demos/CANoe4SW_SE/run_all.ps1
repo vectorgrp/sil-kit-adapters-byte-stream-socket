@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: Copyright 2025 Vector Informatik GmbH
+# SPDX-License-Identifier: MIT
+
 param (
     [string]$SILKitDir
 )
@@ -69,7 +72,6 @@ function StartProcess
   }
 
   try {
-    
     Write-Output "[info] Starting $ProcessLegibleName"
 
     if( $Process.Start()){
@@ -138,7 +140,7 @@ $RegistryProcess = CreateProcessObject `
 
 $SocatProcess = CreateProcessObject `
   -command "powershell" `
-  -arguments "-NoProfile -ExecutionPolicy unrestricted -File ${PSScriptRoot}\..\..\tools\socat.ps1 23456"
+  -arguments "-NoProfile -ExecutionPolicy unrestricted -File ${PSScriptRoot}\..\..\tools\echo_server.ps1 23456"
 
 $AdapterProcess = CreateProcessObject `
   -command "${PSScriptRoot}\..\..\bin\sil-kit-adapter-byte-stream-socket.exe" `
@@ -149,11 +151,6 @@ $AdapterProcess = CreateProcessObject `
       "fromSocket" +
     " --log Debug" )`
   -outputfilename "${PSScriptRoot}\logs\sil-kit-adapter-byte-stream-socket.out"
-
-$DemoProcess = CreateProcessObject `
-  -command "${PSScriptRoot}\..\..\bin\sil-kit-demo-byte-stream-echo-device.exe" `
-  -arguments "--log Debug" `
-  -outputfilename "${PSScriptRoot}\logs\sil-kit-demo-byte-stream-echo-device.out"
 
 # Create the log directory
 if (-not (Test-Path -Path ${PSScriptRoot}/logs))
@@ -168,15 +165,10 @@ try {
     StartProcess $SocatProcess "The socat script"
     try {
       StartProcess $AdapterProcess "The adapter"
-      try {
-        StartProcess $DemoProcess "The echo participant"
-        Write-Output "[info] Starting run.ps1 test script"
-        # Get the last line telling the overall test verdict (passed/failed)
-        $scriptResult = & $PSScriptRoot\run.ps1
-        Write-Output "[info] Tests finished"
-      } finally {
-        StopProcess $DemoProcess
-      }
+      Write-Output "[info] Starting run.ps1 test script"
+      # Get the last line telling the overall test verdict (passed/failed)
+      $scriptResult = & $PSScriptRoot\run.ps1
+      Write-Output "[info] Tests finished"
     } finally {
       StopProcess $AdapterProcess
     }

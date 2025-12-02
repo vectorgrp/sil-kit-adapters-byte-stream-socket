@@ -1,4 +1,5 @@
-// Copyright (c) Vector Informatik GmbH. All rights reserved.
+// SPDX-FileCopyrightText: Copyright 2025 Vector Informatik GmbH
+// SPDX-License-Identifier: MIT
 
 #include "SilKitAdapterByteStreamSocket.hpp"
 
@@ -52,7 +53,7 @@ void print_help(bool userRequested = false)
         "Example:\n"
         "sil-kit-adapter-byte-stream-socket "
         << participantNameArg << " BytestreamAdapter " << bytestreamArg
-        << " localhost:12345\n";
+        << " localhost:12345,toSocket,fromSocket\n";
 
     if (!userRequested)
         std::cout << "\n"

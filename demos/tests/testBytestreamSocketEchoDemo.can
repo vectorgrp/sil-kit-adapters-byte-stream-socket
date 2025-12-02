@@ -4,34 +4,26 @@ includes
   
 }
 
-
 variables
 {
-  distObjRef *toSocket_object = Namespace::EchoDevice;
-  distObjRef *fromSocket_object = Namespace::Adapter;
   int result;
-  dword timeout=2000;
+  dword timeout = 2000;
+  char msg[13] = "test message";
 }
 
-void CheckTestResult(char testName[], int result)
+export testfunction PrepareTestscenario()
 {
-  if (result != 1)
-  {
-    TestStepFail(testName, "FAILED: No message within timeout");
-  }
-  TestStepPass(testName, "SUCCESS");
+  $Namespace::EchoDevice.toSocket = msg;
 }
 
 export testcase DO_WaitForSocketMessage()
 {
-  fromSocket_object.Connect();
-  result = testWaitForUpdate(Namespace::Adapter.fromSocket,timeout);
-  CheckTestResult("DO_WaitForQemuMessage", result);
-}
-
-export testcase DO_WaitForEchoMessage()
-{
-  toSocket_object.Connect();
-  result = testWaitForUpdate(Namespace::EchoDevice.toSocket,timeout);
-  CheckTestResult("DO_WaitForEchoMessage", result);
+  Namespace::Adapter.Connect();
+  result = testWaitForImplValueString(Namespace::Adapter.fromSocket, msg, timeout);
+  
+  if (result != 1)
+  {
+    TestStepFail("DO_WaitForSocketMessage", "FAILED: No message matching within timeout");
+  }
+  TestStepPass("DO_WaitForSocketMessage", "SUCCESS");
 }

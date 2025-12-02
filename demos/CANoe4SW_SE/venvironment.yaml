@@ -1,15 +1,13 @@
-version: 2.2.0
+version: 4.2.0
 
 global-settings:
- time-source: internal-realtime
- default-network-mapping: internal-simulator
+  working-mode:
+    time-source: internal-realtime
+    default-network-mapping: internal-simulator
 
 sil-kit:
   participant-name: CANoe4SW_SE
-  config-file-path: ../CANoe/SilKitConfig_CANoe.silkit.yaml
+  config-file-path: ../SilKitConfig_CANoe.silkit.yaml
 
 datasources:
-  input-files:
-  - file-path: ../CANoe/Datasources_observer.vcdl
-
-      
+- file-path: ../CANoe/Datasources.vcdl

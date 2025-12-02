@@ -17,7 +17,7 @@ add_subdirectory(demos)
 
 include(common/cmake/InstallFunctions.cmake)
 
-fix_windows_install_folder(${PROJECT_VERSION})
+fix_windows_install_folder("SIL Kit Adapter for Byte Stream Socket" ${PROJECT_VERSION} )
 
 install_adapter_source(
     ${CMAKE_CURRENT_SOURCE_DIR}/adapter

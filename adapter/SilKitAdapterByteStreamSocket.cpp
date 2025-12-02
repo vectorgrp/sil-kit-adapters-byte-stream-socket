@@ -13,6 +13,7 @@
 #include "common/SocketToBytesPubSubAdapter.hpp"
 
 using namespace adapters;
+using namespace bytes_socket;
 using namespace util;
 
 const std::string adapters::bytestreamArg = "--socket-to-byte-stream";
@@ -33,16 +34,14 @@ void print_help(bool userRequested = false)
         "  ["
         << logLevelArg
         << " <Trace|Debug|Warn|{Info}|Error|Critical|Off>]\n"
-        " [["
+        "  [["
         << bytestreamArg
-        << "\n"
-        << bytes_socket::SocketToBytesPubSubAdapter::printArgumentHelp("<host>:<port>", "    ")
-        << " ]]\n"
-        << " [["
+        << help::SocketAdapterArgumentHelp("<host>:<port>", "     ")
+        << "\n  ]]\n"
+        << "  [["
         << unixBytestreamArg
-        << "\n"
-        << bytes_socket::SocketToBytesPubSubAdapter::printArgumentHelp("<path to socket identifier>", "    ")
-        << " ]]\n"
+        << help::SocketAdapterArgumentHelp("<path to socket identifier>", "     ")
+        << "\n  ]]\n"
         "\n"
         "There needs to be at least one "
         << bytestreamArg << " argument. Each socket must be unique.\n"
@@ -85,7 +84,7 @@ int main(int argc, char** argv)
         const auto participant = CreateParticipant(argc, argv,
             logger, &participantName, &lifecycleService, &runningStatePromise);
 
-        std::vector<std::unique_ptr<bytes_socket::SocketToBytesPubSubAdapter>> transmitters;
+        std::vector<std::unique_ptr<SocketToBytesPubSubAdapter>> transmitters;
 
         //set to ensure the provided sockets are unique (text-based)
         std::set<std::string> alreadyProvidedSockets;
@@ -94,14 +93,14 @@ int main(int argc, char** argv)
 
         foreachArgDo(argc, argv, bytestreamArg, [&](char* arg) -> void {
             ++numberOfRequestedAdaptations;
-            transmitters.emplace_back(bytes_socket::SocketToBytesPubSubAdapter::parseArgument(arg,
+            transmitters.emplace_back(SocketToBytesPubSubAdapter::parseArgument(arg,
                 alreadyProvidedSockets, participantName,
                 ioContext, participant.get(), logger, false));
             });
 
         foreachArgDo(argc, argv, unixBytestreamArg, [&](char* arg) -> void {
             ++numberOfRequestedAdaptations;
-            transmitters.emplace_back(bytes_socket::SocketToBytesPubSubAdapter::parseArgument(arg,
+            transmitters.emplace_back(SocketToBytesPubSubAdapter::parseArgument(arg,
                 alreadyProvidedSockets, participantName,
                 ioContext, participant.get(), logger, true));
             });

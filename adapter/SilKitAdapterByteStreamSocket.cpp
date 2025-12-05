@@ -20,6 +20,11 @@ const std::string adapters::bytestreamArg = "--socket-to-byte-stream";
 const std::string adapters::unixBytestreamArg = "--unix-socket-to-byte-stream";
 const std::string adapters::defaultParticipantName = "SilKitAdapterByteStreamSocket";
 
+void PrintVersion()
+{
+    std::cout << "Vector SIL Kit Adapter Byte Stream Socket - version: " << SILKIT_ADAPTER_VERSION << std::endl;
+}
+
 void print_help(bool userRequested = false)
 {
     std::cout << "Usage (defaults in curly braces if you omit the switch):" << std::endl
@@ -54,6 +59,8 @@ void print_help(bool userRequested = false)
         << participantNameArg << " BytestreamAdapter " << bytestreamArg
         << " localhost:12345,toSocket,fromSocket\n";
 
+    std::cout << "\nPass "<< versionArg <<" to get the version of the Adapter.\n";
+
     if (!userRequested)
         std::cout << "\n"
         "Pass "
@@ -62,6 +69,14 @@ void print_help(bool userRequested = false)
 
 int main(int argc, char** argv)
 {
+    if (findArg(argc, argv, versionArg, argv) != NULL)
+    {
+        PrintVersion();
+        return CodeSuccess;
+    }
+
+    PrintVersion();
+
     if (findArg(argc, argv, helpArg, argv) != NULL)
     {
         print_help(true);

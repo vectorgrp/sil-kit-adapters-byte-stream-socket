@@ -14,6 +14,7 @@ include(common/cmake/Building.cmake)
 
 include(${CMAKE_CURRENT_LIST_DIR}/cmake/SilKitAdapterVersion.cmake)
 configure_silkit_adapter_version(${PROJECT_NAME})
+add_definitions(-DSILKIT_ADAPTER_VERSION="${PROJECT_VERSION}")
 
 enable_address_sanitizer(${ENABLE_ASAN})
 enable_undefined_sanitizer(${ENABLE_UBSAN})

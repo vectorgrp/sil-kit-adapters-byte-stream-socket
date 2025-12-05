@@ -81,6 +81,8 @@ The application takes the following command line arguments (defaults in curly br
             |,<label key>=<mandatory label value>
            ]]
      ]]
+     [--version]
+     [--help]
 
 There needs to be at least one ``--socket-to-byte-stream`` or ``--unix-socket-to-byte-stream`` argument, and each socket needs to be unique.
 

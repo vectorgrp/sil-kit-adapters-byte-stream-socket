@@ -10,9 +10,14 @@ set(SILKIT_ADAPTER_BYTE_STREAM_SOCKET_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_D
 set(SILKIT_ADAPTER_BYTE_STREAM_SOCKET_LIBRARY_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/lib")
 
 include(common/cmake/RepoTargets.cmake)
+include(common/cmake/Building.cmake)
 
 include(${CMAKE_CURRENT_LIST_DIR}/cmake/SilKitAdapterVersion.cmake)
 configure_silkit_adapter_version(${PROJECT_NAME})
+
+enable_address_sanitizer(${ENABLE_ASAN})
+enable_undefined_sanitizer(${ENABLE_UBSAN})
+enable_thread_sanitizer(${ENABLE_THREADSAN})
 
 if(BUILD_LINUX_PACKAGE)
     add_subdirectory(docs/man)

@@ -30,6 +30,7 @@ install_adapter_source(
     ${CMAKE_CURRENT_SOURCE_DIR}/cmake
     ${CMAKE_CURRENT_SOURCE_DIR}/demos
     ${CMAKE_CURRENT_SOURCE_DIR}/docs
+    ${CMAKE_CURRENT_SOURCE_DIR}/third_party
     ${CMAKE_CURRENT_SOURCE_DIR}/tools
 )
 install_git_source(${CMAKE_CURRENT_SOURCE_DIR}/common)

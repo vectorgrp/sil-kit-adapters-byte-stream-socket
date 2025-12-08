@@ -32,6 +32,8 @@ timeout 30s grep -q 'Press Ctrl-C to terminate...' <(tail -f $logdir/sil-kit-reg
 echo "[info] Starting echo server"
 $scriptDir/../../tools/echo_server.sh 23456 &> $logdir/echo_server.out &
 
+sleep 2 # wait for the echo server to start
+
 echo "[info] Starting the adapter"
 #Using bash printf to dissect complex & large argument
 $scriptDir/../../bin/sil-kit-adapter-byte-stream-socket \

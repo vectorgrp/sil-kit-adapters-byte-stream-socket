@@ -1,4 +1,11 @@
 # Vector SIL Kit Adapter for Byte Stream Socket
+[![Vector Informatik](https://img.shields.io/badge/Vector%20Informatik-rgb(180,0,50))](https://www.vector.com/int/en/)
+[![SocialNetwork](https://img.shields.io/badge/vectorgrp%20LinkedIn®-rgb(0,113,176))](https://www.linkedin.com/company/vectorgrp/)\
+[![ReleaseBadge](https://img.shields.io/github/v/release/vectorgrp/sil-kit-adapters-byte-stream-socket.svg)](https://github.com/vectorgrp/sil-kit-adapters-byte-stream-socket/releases)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/vectorgrp/sil-kit-adapters-qemu/blob/main/LICENSE)
+[![Win & Linux Builds](https://github.com/vectorgrp/sil-kit-adapters-byte-stream-socket/actions/workflows/build-linux-and-windows-release.yml/badge.svg)](https://github.com/vectorgrp/sil-kit-adapters-byte-stream-socket/actions/workflows/build-linux-and-windows-release.yml)
+[![SIL Kit](https://img.shields.io/badge/SIL%20Kit-353b42?logo=github&logoColor=969da4)](https://github.com/vectorgrp/sil-kit)
+
 This collection of software is provided to illustrate how the [Vector SIL Kit](https://github.com/vectorgrp/sil-kit/) can bridge any socket and transmit the content between it and a pair of SIL Kit Topics.
 
 This repository contains instructions to set up development environment and build the adapter, as well as a simple demo to showcase the functionality.

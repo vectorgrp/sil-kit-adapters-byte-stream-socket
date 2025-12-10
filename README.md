@@ -134,7 +134,7 @@ The `--log Debug` argument requests the sil-kit-adapter-byte-stream-socket to pr
 The sil-kit-demo-byte-stream-socket-auto-sender application is a SIL Kit participant that automatically sends `test message <id>` through the toSocket topic and receives echoed data on the fromSocket topic. You can run it as follows:
 ```
 ./bin/sil-kit-demo-byte-stream-socket-auto-sender
-[date time] [ByteStreamSocketAutoSender] [info] Creating participant, ParticipantName: ByteStreamSocketAutoSender, RegistryUri: silkit://localhost:8501, SilKitVersion: 5.0.1
+[date time] [ByteStreamSocketAutoSender] [info] Creating participant, ParticipantName: ByteStreamSocketAutoSender, RegistryUri: silkit://localhost:8501, SilKitVersion: 5.0.2
 [date time] [ByteStreamSocketAutoSender] [info] Connected to registry at 'tcp://127.0.0.1:8501' via 'tcp://127.0.0.1:53768' (local:///tmp/SilKitRegi54d2044f72372c68.silkit, tcp://localhost:8501)
 [date time] [ByteStreamSocketAutoSender] [info] Press CTRL + C to stop the process...
 [date time] [ByteStreamSocketAutoSender] [info] AutoSender >> Adapter: test message 0

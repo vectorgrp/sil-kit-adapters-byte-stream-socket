@@ -164,7 +164,7 @@ test message 1> 2025/11/27 10:15:32.109546  length=14 from=28 to=41
 where PATH needs to be replaced by an actual filesystem location representing the socket address. If you are using a Linux OS, you may choose PATH=/tmp/socket. In case of a Windows system, PATH=C:\Users\MyUser\AppData\Local\Temp\qemu.socket is a possible choice. 
 Note that the socat command also needs to be adapted in the echo_server.sh script:
 
-    socat UNIX-LISTEN:PATH stdio,fork SYSTEM:"cat"
+    socat UNIX-LISTEN:PATH,fork SYSTEM:"cat"
 
 In the following diagram you can see the whole setup. It illustrates the data flow going through each component involved.
 ```

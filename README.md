@@ -13,12 +13,8 @@ This repository contains instructions to set up development environment and buil
 # Getting Started
 Those instructions assume you use WSL (Ubuntu) or a Linux OS for building and running the adapter (nevertheless it is also possible to do this directly on a Windows system, and use ``bash`` as your interactive shell.
 
-## a) Getting Started with pre-built Adapter and Demos
-Download a preview or release of the adapter directly from [Vector SIL Kit for Byte Stream Socket Releases](https://github.com/vectorgrp/sil-kit-adapters-byte-stream-socket/releases).
 
-If not already existent on your system you should also download a SIL Kit Release directly from [Vector SIL Kit Releases](https://github.com/vectorgrp/sil-kit/releases). You will need this for being able to start a sil-kit-registry.
-
-## b) Getting Started with self-built Adapter and Demos
+## a) Getting Started with self-built Adapter and Demos
 This section specifies steps you should do if you have just cloned the repository.
 
 Before any of those topics, please change your current directory to the top-level in the ``sil-kit-adapters-byte-stream-socket`` repository:
@@ -46,8 +42,49 @@ The adapter and demos are built using ``cmake``:
 
 > If you don't provide a specific path for SILKIT_PACKAGE_DIR and there is no SIL Kit installation on your system, a SIL Kit release package (the default version listed in CMakeLists.txt) will be fetched from github.com and the adapter will be built against it.
 
+> The Adapter can be cross-compiled to be used in QNX environments. In order to acheive that, you can cross-build the adapter for QNX systems using the provided CMake toolchain files inside the common/cmake folder.
+
 The adapter and demo executables will be available in the ``bin`` directory as well as the ``SilKit.dll`` if you are on Windows. Additionally the ``SilKit.lib`` on Windows and the ``libSilKit.so`` on Linux are automatically copied to the ``lib`` directory.
 
+## b) Getting Started with pre-built Adapter and Demos
+Download a preview or release of the adapter directly from [Vector SIL Kit for Byte Stream Socket Releases](https://github.com/vectorgrp/sil-kit-adapters-byte-stream-socket/releases).
+
+If not already existent on your system you should also download a SIL Kit Release directly from [Vector SIL Kit Releases](https://github.com/vectorgrp/sil-kit/releases). You will need this for being able to start a sil-kit-registry.
+
+## Install the sil-kit-adapter-byte-stream-socket (optional)
+
+### Linux installation with Debian package
+On Debian systems, the most straightforward way to install the sil-kit-adapter-byte-stream-socket is to use the Debian package `sil-kit-adapter-byte-stream-socket_*.deb` which is provided with each release.
+After downloading it, you can install it using the following command:
+```
+sudo apt install ./sil-kit-adapter-byte-stream-socket_*.deb
+```
+To get more information about this Debian package you can refer to the SIL Kit Adapter Packaging [README](https://github.com/vectorgrp/sil-kit-adapters-pkg).
+
+**Note 1:** To be able to install and run the adapter, you will also need to install the SIL Kit library. This can be done by installing the `libsilkit<major>_*.deb` and `libsilkit-dev_*.deb` packages provided in the SIL Kit releases, where `<major>` corresponds to the SIL Kit major version (e.g., 5).
+
+**Note 2:** After installing the adapter on Linux, you can run the ``sil-kit-adapter-byte-stream-socket`` from any location without specifying a path. The default installation path is ``/usr/bin``.
+
+### Linux installation with CMake
+To install the sil-kit-adapter-byte-stream-socket using CMake on Linux, run the following command (can be done for self-built and pre-built package after cmake configure):
+
+    sudo cmake --build build --target install
+
+**Note 1:** Be aware that SIL Kit itself also needs to be installed to run the adapter.
+
+**Note 2:** After installing the adapter on Linux, you can run the ``sil-kit-adapter-byte-stream-socket`` from any location without specifying a path. The default installation path is ``/usr/local/bin``.
+
+### Windows installation
+To install the sil-kit-adapter-byte-stream-socket on Windows, run the following command (can be done for self-built and pre-built package after cmake configure):
+
+    cmake --build build --target install --config Release
+
+**Note 1:** Be aware that SIL Kit itself also needs to be installed to run the adapter.
+
+**Note 2:** Elevated rights are needed to install the adapter under its default location. This can be achieved by running the command in a PowerShell opened as administrator.
+
+**Note 3:** The default installation path will be ``C:\Program Files\Vector SIL Kit Adapter for Byte Stream Socket <BYTE_STREAM_SOCKET_ADAPTER_VERSION>``, with <BYTE_STREAM_SOCKET_ADAPTER_VERSION> as the version of the Byte Stream Socket Adapter you install. 
+Depending on your system this default path can be ``Program Files (x86)``.
 
 # Run the sil-kit-adapter-byte-stream-socket
 This application allows the user to attach to a network socket in order to bridge it to the SIL Kit:

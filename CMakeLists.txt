@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: MIT
 
 cmake_minimum_required(VERSION 3.13)
-project(VectorSilKitAdapterByteStreamSocket)
+project(SilKitAdapterByteStreamSocket)
 
 option(BUILD_LINUX_PACKAGE "Creates a SIL Kit Adapter Byte Stream Socket build suitable for package managers in Linux Distributions (.deb)" OFF)
 
